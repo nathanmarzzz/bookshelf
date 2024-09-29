@@ -1,44 +1,51 @@
-import React, {useCallback, useMemo, useState} from 'react'
+import { useCallback, useEffect, useState } from 'react';
 
-import {search, SearchResult} from '../data/books'
+import { search, SearchData } from '../data/books';
 
+import { debounce } from 'lodash';
 
-type SearchOptions = 'title' | 'author' | 'isbn'
-
+type SearchOptions = 'title' | 'author' | 'isbn';
 
 type Props = {
-    text: string,
-    searchBy: SearchOptions,
-    language: string
-}
-
-
-const filterSearch = (data: SearchResult[], language = 'eng') => {
-    console.log('[filterSearch] data: ', data)
-
-    const res = data.find((book) => book?.language?.length == 1 && book.language.includes(language))
-    console.log('[filterSearch] filter res: ', res)
-
-}
+  text: string;
+  searchBy: SearchOptions;
+  language: string;
+};
 
 export const useSearch = (props: Props) => {
-    const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<SearchData[] | null>([]);
 
-    const fetch = useCallback(async () => {
-        setLoading(true)
-        search(props.text).then(
-            (res) => {
-                console.log('data: ', res)
+  const fetch = useCallback(async () => {
+    if (!props.text) {
+      return;
+    }
+    setLoading(true);
+    search(props.text)
+      .then(res => {
+        setData(res);
+      })
+      .catch(err => console.error('[use search] catch ERROR: ', err))
+      .finally(() => setLoading(false));
+  }, [props.text]);
 
-                filterSearch(res, props.language)
-            }
-        ).catch(
-            (err) => console.error('ERROR: ', err)
-        ).finally(() => setLoading(false))
-    }, [props])
+  const callFetch = useCallback(() => {
+    if (!loading) {
+      fetch();
+    }
+  }, [loading, fetch]);
 
-    
+  const debounceFetch = debounce(
+    () => {
+      callFetch();
+    },
+    200,
+    { leading: true, trailing: true },
+  );
 
+  useEffect(() => {
+    debounceFetch();
+  }, [props.text]);
 
-    return { fetch, loading }
-}
+  return { data, debounceFetch, loading };
+};

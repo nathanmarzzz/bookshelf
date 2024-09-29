@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { SearchBar } from "../components/search/searchbar";
-import { useSearch } from "../hooks/use-search";
-import { debounce } from "lodash";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Search } from '../components/search/search';
+import { windowHeight, windowWidth } from '../utils/platform/platform';
 
 /**
- * 
+ *
  * should be made up of sections that contain:
  *  - user follwing/friend updates
  *  - recommended books
@@ -13,39 +12,23 @@ import { debounce } from "lodash";
  *  - book club updates
  */
 export const Home = () => {
-    const [value, setValue] = useState<string>('')
-
-    const {fetch} = useSearch({
-        text: value,
-        searchBy: 'title',
-        language: 'eng' // should be global config
-    })
-
-//    useEffect(() => { fetch()}, [])
-    const search = useCallback(
-        debounce(
-            (text: string) => {
-                fetch()
-            }, 500
-        ), []
-    )
-
-    const handleSearchchange  = useCallback( (val: string) => {
-        setValue(val)
-    }, [])
-
-    return (
-        <View style={styles.container}>
-            <SearchBar value={value} setValue={setValue} search={search}
-                 />
-        </View>
-    )
-}
-
+  return (
+    <View style={styles.container}>
+      <Text>home</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-   container: {
+  container: {
     justifyContent: 'center',
-    alignItems: 'center'
-   }
-})
+    alignSelf: 'center',
+    // backgroundColor: 'white'
+    // flex: 1,
+    // width: windowWidth,
+    // height: windowHeight,
+    // justifyContent: 'center',
+    // position: 'absolute',
+    // marginTop: windowHeight * 0.35,
+  },
+});

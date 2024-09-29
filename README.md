@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 
@@ -78,8 +78,57 @@ To learn more about React Native, take a look at the following resources:
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
-
 # -------------------------------------------------------------------------------------------------------------------------------
 
 Goal: A simple version of goodreads with better UI and not buggy
 
+general design:
+
+db collections:
+
+user -> shelf -> shelf_name -> shelf_items (book + review)
+reviews ->
+
+designing a non rdb....????
+
+designing good reads??
+
+relational design:
+
+user:
+
+- id
+- name
+- bio
+- shelf
+- friends : User_ids (mapping table && one-to-many)
+
+shelf:
+
+- id
+- user_id
+- [shelf_name: BookStatus]: ShelfIitems
+
+shelfItem:
+
+- id
+- book_id
+- review_id : ref (one-to-one)
+
+Review:
+
+- id
+- review
+- stars
+- added
+- started
+- finished
+
+non rdb design....?????
+
+user -> shelf -> review_ids
+reviews: (indexes as)
+
+- book_id
+- user_id
+  friends: user_id -> user_id[]

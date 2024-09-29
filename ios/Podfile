@@ -29,6 +29,11 @@ target 'bookshelf' do
   end
 
   post_install do |installer|
+    # installer.pods_project.targets.each do |target|
+    #   if target.name == "React"
+    #     target.remove_from_project
+    #   end
+    # end
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,

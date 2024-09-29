@@ -1,7 +1,5 @@
-import { MongoClient } from "mongodb";
+import { MongoClient } from 'mongodb';
 
+const url_local = 'mongodb://localhost:27017';
 
-const url_local = 'mongodb://localhost:27017'
-
-export const client = new MongoClient(url_local)
-
+export const db_client = new MongoClient(url_local);
