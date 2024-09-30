@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Search } from '../components/search/search';
 import { windowHeight, windowWidth } from '../utils/platform/platform';
+import { SearchNav } from '../components/headers/search';
 
 /**
  *
@@ -14,7 +15,7 @@ import { windowHeight, windowWidth } from '../utils/platform/platform';
 export const Home = () => {
   return (
     <View style={styles.container}>
-      <Text>home</Text>
+      <Search />
     </View>
   );
 };
@@ -23,12 +24,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignSelf: 'center',
-    // backgroundColor: 'white'
-    // flex: 1,
-    // width: windowWidth,
-    // height: windowHeight,
-    // justifyContent: 'center',
-    // position: 'absolute',
-    // marginTop: windowHeight * 0.35,
+    width: windowWidth,
+    height: windowHeight,
   },
 });

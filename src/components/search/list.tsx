@@ -1,18 +1,16 @@
 import React, { useCallback } from 'react';
 import { View, FlatList } from 'react-native';
 import { ListItem } from './listItem';
-import { SearchData } from '../../data/books';
+import { SearchResult } from '../../data/books';
 
 type Props = {
-  data: SearchData[];
+  data: SearchResult[];
   loading: boolean;
 };
 
 export const List = (props: Props) => {
-  console.log('[list] init ', props.data.slice(0, 10));
-
-  const renderItem = useCallback(({ item }: { item: SearchData }) => {
-    if (!item.title || !item.author) {
+  const renderItem = useCallback(({ item }: { item: SearchResult }) => {
+    if (!item || !item.volumeInfo.title || !item.volumeInfo?.authors?.length) {
       return null;
     }
 

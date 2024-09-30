@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { search, SearchData } from '../data/books';
+import { search, SearchResult } from '../data/books';
 
 import { debounce } from 'lodash';
 
@@ -14,7 +14,7 @@ type Props = {
 
 export const useSearch = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<SearchData[] | null>([]);
+  const [data, setData] = useState<SearchResult[] | null>([]);
 
   const fetch = useCallback(async () => {
     if (!props.text) {

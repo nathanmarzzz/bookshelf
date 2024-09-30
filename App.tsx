@@ -30,7 +30,6 @@ function App(): React.JSX.Element {
   };
 
   return (
-    // <SafeAreaView>
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -38,23 +37,15 @@ function App(): React.JSX.Element {
             name="Home"
             component={Home}
             options={{
-              header: () => <SearchNav />,
-              headerStyle: { backgroundColor: 'red' },
+              header: () => null,
             }}
           />
 
-          <Stack.Screen name="Search" component={Search} />
+          {/* <Stack.Screen name="Search" component={Search} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
-    // </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    // flex: 0.2,
-  },
-});
 
 export default App;

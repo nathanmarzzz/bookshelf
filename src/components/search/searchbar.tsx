@@ -14,7 +14,6 @@ type Props = {
  * this is a search bar componenent
  *
  * this is used in the home page
- * and used to nav to search page
  *
  * mvp
  *  - search and show results in scollable list
@@ -24,8 +23,6 @@ type Props = {
  *  - auto complete searching
  */
 export const SearchBar = (props: Props) => {
-  console.log('[SearchBar] init ', props.value);
-
   return (
     <View style={styles.container}>
       <TextInput
@@ -34,8 +31,9 @@ export const SearchBar = (props: Props) => {
         onChangeText={props.setValue}
         style={styles.searchbar}
         clearButtonMode="always"
-        autoFocus={true}
+        // autoFocus={true}
         onBlur={props.handleBlur}
+        autoComplete="name"
       />
     </View>
   );
@@ -44,14 +42,22 @@ export const SearchBar = (props: Props) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    // alignItems: 'center',
+    width: windowWidth,
+    height: windowHeight * 0.125,
+    backgroundColor: '#2eab34',
+    position: 'absolute',
+    top: 0,
   },
   searchbar: {
-    width: windowWidth * 0.9,
-    height: '80%',
+    width: '90%',
+    height: '27%',
+    backgroundColor: 'white',
     alignSelf: 'center',
-    alignContent: 'center',
-    margin: '2%',
+    justifyContent: 'center',
+    borderRadius: 12,
+    borderColor: 'transparent',
+    top: windowHeight * 0.035,
+    padding: '2%',
   },
   text: {
     color: 'black',

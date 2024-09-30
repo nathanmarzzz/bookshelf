@@ -1,13 +1,37 @@
 import { getUUID } from '../utils/utils';
 import { db_client } from '../api/local_db';
 
-const open_lib_url = 'https://openlibrary.org';
-const search_url = `${open_lib_url}/search`;
+// const open_lib_url = 'https://openlibrary.org';
+// const search_url = `${open_lib_url}/search`;
+
+import { BOOK_API_KEY } from '@env';
+
+const books_api_key = BOOK_API_KEY;
 
 // api endpoints
-const search_book = 'search';
-const update_shelf = 'update-shelf';
-const book_metadata = 'book-metadata';
+const google_book_url = 'https://www.googleapis.com/books/v1';
+const gsearch = 'volumes?q=';
+
+/**
+ *
+ * @param name name of book to search
+ * @param author optional -- name of author to search
+ * @returns - url for search request to google books api
+ */
+const gsearch_url_builder = (name: string, author = '') => {
+  const g_name = name.replace(' ', '+');
+  const g_author = author.replace(' ', '+');
+  let url = `${google_book_url}/${gsearch}`;
+
+  if (g_name) {
+    url += g_name;
+  }
+  if (g_author) {
+    url += `+inauthor:${g_author}`;
+  }
+
+  return url + `&key=${books_api_key}`;
+};
 
 const headers = new Headers({
   'User-Agent': 'midshelf/1.0 (nathan.zadkovsky@gmail.com)',
@@ -130,60 +154,73 @@ export type SearchData = {
   id: string;
 };
 
+/** ---- data retured from google api volume api ---- */
+export type IndustryIdentifiers = {
+  type: 'ISBN_10' | 'ISBN_13';
+  identifier: string;
+};
+
+export type ImageLinked = {
+  thumbnail: string;
+  smallThumbnail: string;
+};
+
+export type ReadingModes = { text: boolean; image: true };
+
+export type VolumeInfo = {
+  authors: string[];
+  categories: string[]; // genres
+  description: string;
+  imageLinks: ImageLinked;
+  industryIdentifiers: IndustryIdentifiers[];
+  language: string;
+  printType: string;
+  maturityRating: string;
+  pageCount: number;
+  previewLink: string;
+  publishedDate: string; // ex: yyyy-mm-dd
+  publisher: string;
+  readingModes: ReadingModes;
+  title: string;
+  subtitle?: string;
+};
+
+export type AccessModeInfo = { isAvailable: boolean; acsTokenLink?: string };
+
+export type AccessInfo = {
+  country: string;
+  epud: AccessModeInfo;
+  pdf: AccessModeInfo;
+};
+
+export type SearchInfo = {
+  textSnippet: string;
+};
 // api res from open ilb api result
 export type SearchResult = {
-  author_name: string[];
-  key: string;
-  title: string;
-  language: string[];
+  accessInfo: AccessInfo;
+  id: string;
+  etag: string;
+  kind: string; // e.g. book#volume
+  searchInfo: SearchInfo; // description
+  selfLink: string; // link to GET by id -- e.g. "https://www.googleapis.com/books/v1/volumes/dZK3DwAAQBAJ"
+  volumeInfo: VolumeInfo;
 };
 
 /**
  * will be to search books
  * @param title -- should be text/value to be more generic
  */
-export const search = (
-  title = 'brothers karamazov',
-): Promise<SearchData[] | null> => {
-  console.log('[sarch api] title ', title);
-  const search_title = title.replace(' ', '+');
-  const url =
-    search_url +
-    `.json?q=${search_title}&fields=key,title,author_name,language&lang=en`;
+export const search = (title = ''): Promise<SearchResult[] | null> => {
+  const url = gsearch_url_builder(title);
 
-  console.log('[seach] ', title, url);
   return fetch(url, options)
     .then(res => res.json())
     .then(res => {
-      console.log('[seach] res', res);
-      return filterSearch(res.docs ?? []);
+      return res.items ?? [];
     })
     .catch(err => {
       console.error('ERROR:', err);
       return null;
     });
-};
-
-/**
- *
- * @param data - resp from search res
- * @param language - default to englist -- will be sent as a provider value
- * @returns
- */
-const filterSearch = (data: SearchResult[], language = 'eng'): SearchData[] => {
-  console.log('[filterSearch] data: ', data);
-
-  const res: SearchData[] = data
-    .filter(
-      book => book?.language?.length == 1 && book.language.includes(language),
-    )
-    .map(book => ({
-      author: book.author_name?.join(', ') ?? '',
-      title: book.title,
-      languages: book.language ?? '',
-      id: getUUID(),
-    }));
-
-  console.log('[filterSearch] filter res: ', res);
-  return res;
 };

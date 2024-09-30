@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { List } from './list';
 import { useSearch } from '../../hooks/use-search';
 import { SearchBar } from './searchbar';
 import { windowHeight, windowWidth } from '../../utils/platform/platform';
 
 export const Search = () => {
-  console.log('in searchhhhhh');
   const [value, setValue] = useState<string>('');
 
   const { data, debounceFetch, loading } = useSearch({
@@ -25,9 +24,8 @@ export const Search = () => {
         <SearchBar value={value} setValue={setValue} handleBlur={handleBlur} />
       </View>
 
-      {data?.length ? (
+      {data?.length && value ? (
         <View style={styles.listContainer}>
-          <Text>list here</Text>
           <List data={data ?? []} loading={loading} />
         </View>
       ) : null}
@@ -37,25 +35,21 @@ export const Search = () => {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
     width: windowWidth,
-    height: windowHeight * 0.095,
-    backgroundColor: 'red',
-    // flex: 2,
-    // display: 'flex',
-    // flexDirection: 'column',
+    backgroundColor: '#2eab34',
+    position: 'absolute',
+    top: 0,
+    flexDirection: 'column',
+    display: 'flex',
   },
   searchContainer: {
     justifyContent: 'center',
-    alignSelf: 'center',
-    borderRadius: 12,
-    borderColor: 'grey',
-    borderWidth: 1,
-    margin: '2%',
   },
   listContainer: {
     justifyContent: 'center',
-    // alignItems: 'center',
-    margin: '2%',
+    position: 'absolute',
+    top: windowHeight * 0.125,
   },
   loading: {},
   empty: {},
