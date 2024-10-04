@@ -1,24 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React from 'react';
+import { useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+
 import { Home } from './src/views/home';
+import { BookInfo } from './src/views/bookinfo';
+
 import { store } from './src/store/store';
 import { Provider } from 'react-redux';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Search } from './src/components/search/search';
-import { SearchBar } from 'react-native-screens';
-import { windowHeight, windowWidth } from './src/utils/platform/platform';
-import { SearchNav } from './src/components/headers/search';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +23,7 @@ function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
             component={Home}
@@ -41,7 +32,8 @@ function App(): React.JSX.Element {
             }}
           />
 
-          {/* <Stack.Screen name="Search" component={Search} /> */}
+          {/* @ts-ignore -- for now not sure how to define component with route props */}
+          <Stack.Screen name="Book Info" component={BookInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

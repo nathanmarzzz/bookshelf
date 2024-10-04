@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { SearchResult } from '../../data/books';
+import { useNavigation } from '@react-navigation/native';
+import { ImageContainer } from '../lib/ImageContainer';
 
 type Props = {
   book: SearchResult;
-  // nav_url: string;
 };
 
 export const ListItem = (props: Props) => {
+  const navigation = useNavigation<any>();
+
   const img_url =
     props.book.volumeInfo?.imageLinks?.thumbnail ??
     props.book.volumeInfo?.imageLinks?.smallThumbnail ??
@@ -16,17 +19,18 @@ export const ListItem = (props: Props) => {
   // react native won't display links from insecure urls
   const uri = img_url ? img_url.replace('http', 'https') : '';
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={styles.container}
+      onPress={() => {
+        navigation.navigate('Book Info', {
+          book: props.book,
+          img_url: uri ?? '',
+        });
+      }}>
       {/* img */}
-      {uri ? (
-        <View style={styles.imgContainer}>
-          <Image source={{ uri: uri }} style={styles.img} />
-        </View>
-      ) : (
-        <View style={styles.noImgContainer}>
-          <Text style={styles.noImg}>?</Text>
-        </View>
-      )}
+      <View style={(styles.imgContainer, { flex: uri ? 0.15 : 0.1 })}>
+        <ImageContainer width={50} height={50} img_url={uri} />
+      </View>
 
       {/* title */}
       <View style={styles.textContainer}>
@@ -37,7 +41,7 @@ export const ListItem = (props: Props) => {
           {props.book.volumeInfo.authors.join()}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -66,25 +70,5 @@ const styles = StyleSheet.create({
   imgContainer: {
     marginHorizontal: '2%',
     alignSelf: 'flex-start',
-    flex: 0.15,
-  },
-  img: {
-    resizeMode: 'contain',
-    width: 50,
-    height: 50,
-  },
-  noImgContainer: {
-    flex: 0.1,
-    backgroundColor: 'grey',
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    marginHorizontal: '4%',
-  },
-  noImg: {
-    color: 'white',
-    justifyContent: 'center',
-    fontWeight: '600',
-    textAlign: 'center',
   },
 });
