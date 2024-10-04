@@ -1,5 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  NativeSyntheticEvent,
+  TextLayoutEventData,
+} from 'react-native';
 import { SearchResult } from '../data/books';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteParams } from '../../types/generics';
@@ -34,34 +40,80 @@ type Props = {
  *  - then most recent
  *
  */
+const DESCRIPTION_NUMBER_OF_LINES = 3;
+const SHOW_ALL_LINES = 0;
 export const BookInfo = ({ navigation, route }: Props) => {
   const { book, img_url } = route.params;
 
+  const [descriptionTruncated, setDescriptionTruncatd] =
+    useState<boolean>(false);
+
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+
+  const descriptionRef = useRef(null);
+
+  const handleTextLayout = (
+    event: NativeSyntheticEvent<TextLayoutEventData>,
+  ) => {
+    const { lines } = event.nativeEvent;
+    if (lines.length > DESCRIPTION_NUMBER_OF_LINES) {
+      setDescriptionTruncatd(true);
+    }
+  };
+
+  const handleExpandPress = useCallback(
+    () => setDescriptionExpanded(!descriptionExpanded),
+    [descriptionExpanded],
+  );
+
   return (
     <View style={styles.container}>
-      {/* cover img -- edition specific */}
-      <View style={[styles.imgContainer, { flex: img_url ? 0.35 : 0.35 }]}>
-        <ImageContainer width={150} height={150} img_url={img_url} />
+      {/* pic, book info, your/friend  status info */}
+      <View style={styles.rowContainer}>
+        {/* cover img -- edition specific */}
+        <View style={[styles.imgContainer, { flex: img_url ? 0.35 : 0.35 }]}>
+          <ImageContainer width={150} height={150} img_url={img_url} />
+        </View>
+
+        {/* book info */}
+        <View style={styles.right}>
+          <Text style={styles.title}>{book.volumeInfo.title}</Text>
+          <Text style={styles.subtitle}>{book.volumeInfo.authors}</Text>
+          <Text style={styles.subtitle}>{book.volumeInfo.categories}</Text>
+        </View>
       </View>
 
-      {/* book info */}
-      <View style={styles.right}>
-        <Text style={styles.title}>{book.volumeInfo.title}</Text>
-        <Text style={styles.subtitle}>{book.volumeInfo.authors}</Text>
-        <Text style={styles.subtitle}>{book.volumeInfo.categories}</Text>
-      </View>
-
-      {/* <View>
-        <Text style={styles.subtitle} numberOfLines={3}>
+      {/* description info */}
+      <View style={styles.descriptionContainer}>
+        <Text
+          ref={descriptionRef}
+          style={styles.subtitle}
+          numberOfLines={
+            descriptionExpanded ? SHOW_ALL_LINES : DESCRIPTION_NUMBER_OF_LINES
+          }
+          onTextLayout={handleTextLayout}
+          ellipsizeMode="tail">
           {book.volumeInfo.description}
         </Text>
-      </View> */}
+
+        {/* if description is truncated, add epand/hide option */}
+        {descriptionTruncated && (
+          <Text onPress={handleExpandPress} style={{ fontWeight: '600' }}>
+            {descriptionExpanded ? 'Read less' : 'Read more...'}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -90,4 +142,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: 'grey',
   },
+  descriptionContainer: { justifyContent: 'center', margin: '2%' },
 });
