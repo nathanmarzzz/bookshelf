@@ -14,7 +14,7 @@ export const ImageContainer = ({ width, height, img_url }: Props) => {
       style={[styles.img, { width: width, height: height }]}
     />
   ) : (
-    <View style={[styles.noImgContainer, { width: width, height: 150 }]}>
+    <View style={[styles.noImgContainer, { height: height }]}>
       <Text style={styles.noImg}>?</Text>
     </View>
   );
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   noImgContainer: {
     backgroundColor: 'grey',
     justifyContent: 'center',
-    marginHorizontal: '2%',
+    left: 8,
   },
   noImg: {
     color: 'white',
