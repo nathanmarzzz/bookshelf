@@ -10,8 +10,10 @@ import { Provider } from 'react-redux';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Login } from './src/views/Login';
 
 const Stack = createNativeStackNavigator();
+const title = 'bookShelf';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -23,7 +25,15 @@ function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: title,
+            }}
+          />
+
           <Stack.Screen
             name="Home"
             component={Home}

@@ -55,7 +55,7 @@ type Review = {
   status: BookStatus;
 };
 
-type Book = {
+export type Book = {
   id: string;
   name: string;
 
@@ -68,21 +68,8 @@ type Book = {
   reviews: Review[];
 };
 
-type Shelf = {
+export type Shelf = {
   [shelf_name in BookStatus]: Book[];
-};
-
-type User = {
-  id: string; // uuid
-  name: string;
-  user_name: string;
-  bio: string;
-
-  shelf: Shelf;
-  friends: User[]; // must be mutual
-
-  genres: string;
-  favorites: Book[];
 };
 
 type ShelfItem = {

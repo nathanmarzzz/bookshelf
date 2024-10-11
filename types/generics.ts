@@ -3,3 +3,7 @@ export type RouteParams<T> = {
   name: string; // current context
   params: T;
 };
+
+export type Error = {
+  message: string;
+};
