@@ -24,16 +24,15 @@ users_collection = db.users
 #return constatns for login and register
 
 # login return values
-LOGIN_SUCCESS = 'Login successful'
 LOGIN_CREDENTIALS_INCORRECT = 'Login credentials invalid'
 NEED_TO_REGISTER = 'No user found, please register a new account or try again'
 
 #  register return values
-REGISTER_SUCCESS = 'Registered successfully'
 USER_EXISTS = 'User already exists, please login'
 
 
 # both
+SUCCESS = 'Successful'
 ERROR = 'Error: please try again later'
 
 
@@ -86,7 +85,7 @@ def login():
       password_correct = bcrypt.checkpw(encoded_password, saved_password) 
 
       if password_correct:
-        return jsonify(dict(msg=LOGIN_SUCCESS, error=None))
+        return jsonify(dict(msg=SUCCESS, error=None))
 
       else:
         return jsonify(dict(msg=LOGIN_CREDENTIALS_INCORRECT, error=None))  
@@ -128,7 +127,7 @@ def register():
     try:
       # save to db
       users_collection.insert_one(user_data)
-      return jsonify(dict(msg=REGISTER_SUCCESS, error=None))
+      return jsonify(dict(msg=SUCCESS, error=None))
     except Exception as e:
       return jsonify(dict(msg=ERROR, error=e))
     

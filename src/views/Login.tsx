@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { setUser } from '../store/user';
 import { Button } from 'react-native-paper';
 
-const LOGIN_SUCCESS = 'Login successful';
+const SUCCESS = 'Successful';
 const LOGIN_CREDENTIALS_INCORRECT = 'Login credentials invalid';
 const NEED_TO_REGISTER =
   'No user found, please register a new account or try again';
@@ -59,17 +59,14 @@ export const Login = () => {
         return;
       }
 
-      const login_response = await user(
-        values,
-        register ? 'register' : 'login',
-      );
+      const response = await user(values, register ? 'register' : 'login');
       // TODO : handle responses
       // succes, wrong credentials, need to register, error
-      const { msg, error } = login_response;
+      const { msg, error } = response;
       if (error) {
         // display error at top with banner/toast
       } else {
-        if (msg == LOGIN_SUCCESS) {
+        if (msg == SUCCESS) {
           // nav to home
           navigation.navigate('Home');
 
