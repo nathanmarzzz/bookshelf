@@ -80,7 +80,7 @@ yarn-error.log
 .ini
 
 # .venv files
-.venv/
+bookshelf_venv/
 
 # py cache
 __pycache__
