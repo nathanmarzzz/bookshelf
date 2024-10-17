@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 import { setUser } from '../store/user';
 import { Button } from 'react-native-paper';
+import { State } from '../store/store';
 
 const SUCCESS = 'Successful';
 const LOGIN_CREDENTIALS_INCORRECT = 'Login credentials invalid';
@@ -41,13 +42,18 @@ const loginValidation = Yup.object().shape({
 export const Login = () => {
   const [register, setRegister] = useState<boolean>(false);
 
-  const currUser = useSelector((state: any) => state.user);
+  const currUser = useSelector((state: State) => state.user);
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
 
   // use to check if previously logged in
   // TODO : check session valid
   const userLoggedin = currUser !== null;
+
+  // using to test
+  // if (userLoggedin) {
+  //   navigation.navigate('BottomTab');
+  // }
 
   const submit = useCallback(
     async (values: FormValues, errors: any) => {
@@ -68,7 +74,7 @@ export const Login = () => {
       } else {
         if (msg == SUCCESS) {
           // nav to home
-          navigation.navigate('Home');
+          navigation.navigate('BottomTab');
 
           // update store with current user
           const curr_user: Partial<User> = {
@@ -128,7 +134,7 @@ export const Login = () => {
             <TextInput
               style={styles.inputField}
               onChangeText={handleChange('password')}
-              value={values.password}
+              value={values.password} // TODO : mask passoword here using asteriks
               placeholder="Password"
             />
 

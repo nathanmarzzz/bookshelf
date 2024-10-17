@@ -2,7 +2,6 @@ import React from 'react';
 import { useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-import { Home } from './src/views/home';
 import { BookInfo } from './src/views/bookinfo';
 
 import { store } from './src/store/store';
@@ -10,7 +9,8 @@ import { Provider } from 'react-redux';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login } from './src/views/Login';
+import { Login } from './src/views/login';
+import { BottomTabNavigator } from './src/navigators/BottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
 const title = 'bookShelf';
@@ -35,8 +35,8 @@ function App(): React.JSX.Element {
           />
 
           <Stack.Screen
-            name="Home"
-            component={Home}
+            name="BottomTab"
+            component={BottomTabNavigator}
             options={{
               header: () => null,
             }}

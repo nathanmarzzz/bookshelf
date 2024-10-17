@@ -1,5 +1,5 @@
 import { Book, Shelf } from './books';
-import { base_url_local } from './conatants';
+import { base_url_local } from './constants';
 
 export type User = {
   id: string; // uuid

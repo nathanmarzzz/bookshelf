@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Search } from '../components/search/search';
 import { windowHeight, windowWidth } from '../utils/platform/platform';
-import { SearchNav } from '../components/headers/search';
 
 /**
  *
@@ -15,7 +14,7 @@ import { SearchNav } from '../components/headers/search';
 export const Home = () => {
   return (
     <View style={styles.container}>
-      <Search />
+      <Text>home</Text>
     </View>
   );
 };
